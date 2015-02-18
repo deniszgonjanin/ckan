@@ -50,7 +50,15 @@ class DatapusherCommand(cli.CkanCommand):
             sys.exit(0)
 
     def _submit_all(self):
-        resources_ids = datastore_db.get_all_resources_ids_in_datastore()
+        #resources_ids = datastore_db.get_all_resources_ids_in_datastore()
+        import ckanapi
+        ckan = ckanapi.LocalCKAN()
+        packages = ckan.action.package_list()
+        resource_ids = []
+        for p in packages:
+            resources = ckan.action.package_show(id=p)['resources']
+            for r in resources:
+                resource_ids.append(r['id'])
         self._submit(resource_ids)
 
     def _submit_package(self, pkg_id):
@@ -83,5 +91,6 @@ class DatapusherCommand(cli.CkanCommand):
             }
             if datapusher_submit({'user': user['name']}, data_dict):
                 print 'OK'
+                import time; time.sleep(10)
             else:
                 print 'Fail'

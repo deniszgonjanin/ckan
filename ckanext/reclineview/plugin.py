@@ -58,7 +58,10 @@ class ReclineViewBase(p.SingletonPlugin):
         toolkit.add_resource('theme/public', 'ckanext-reclineview')
 
     def can_view(self, data_dict):
-        return data_dict['resource'].get('datastore_active')
+        import ckanapi
+        ckan = ckanapi.LocalCKAN()
+        res = ckan.action.resource_show(id=data_dict['resource']['id'])
+        return res.get('datastore_active')
 
     def setup_template_variables(self, context, data_dict):
         return {'resource_json': json.dumps(data_dict['resource']),
