@@ -49,6 +49,17 @@ examples below, this option can be given as ``-c`` for short.
 to execute. Most commands have their own subcommands and options. For example,
 to print out a list of all of your CKAN site's users do:
 
+.. note::
+
+  You may also specify the location of your config file using the CKAN_INI
+  environment variable. You will no longer need to use --config= or -c= to
+  tell paster where the config file is:
+
+  .. parsed-literal::
+
+     export CKAN_INI=\ |development.ini|
+
+
 .. parsed-literal::
 
    paster user list -c |development.ini|
@@ -240,13 +251,7 @@ Make sure that the datastore URLs are set properly before you run these commands
 
 Usage::
 
-    datastore set-permissions SQL_SUPER_USER
-
-    Where:
-        SQL_SUPER_USER is the name of a postgres user with sufficient
-                       permissions to create new tables, users, and grant
-                       and revoke new permissions.  Typically, this would
-                       be the "postgres" user.
+    datastore set-permissions  - shows a SQL script to execute
 
 
 .. _paster db:

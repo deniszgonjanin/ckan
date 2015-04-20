@@ -1,5 +1,6 @@
 import nose.tools
 
+import ckan.plugins as p
 import ckan.new_tests.helpers as helpers
 import ckan.new_tests.factories as factories
 import ckan.model as model
@@ -26,6 +27,16 @@ class TestFactories(object):
         resource1 = factories.Resource()
         resource2 = factories.Resource()
         assert_not_equals(resource1['id'], resource2['id'])
+
+    def test_resource_view_factory(self):
+        if not p.plugin_loaded('image_view'):
+            p.load('image_view')
+
+        resource_view1 = factories.ResourceView()
+        resource_view2 = factories.ResourceView()
+        assert_not_equals(resource_view1['id'], resource_view2['id'])
+
+        p.unload('image_view')
 
     def test_sysadmin_factory(self):
         sysadmin1 = factories.Sysadmin()

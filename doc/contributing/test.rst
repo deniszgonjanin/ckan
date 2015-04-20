@@ -45,7 +45,7 @@ Create test databases:
 
     sudo -u postgres createdb -O |database_user| |test_database| -E utf-8
     sudo -u postgres createdb -O |database_user| |test_datastore| -E utf-8
-    paster datastore set-permissions postgres -c test-core.ini
+    paster datastore set-permissions -c test-core.ini | sudo -u postgres psql
 
 This database connection is specified in the ``test-core.ini`` file by the
 ``sqlalchemy.url`` parameter.
@@ -157,7 +157,7 @@ Front-end Testing
 All new CKAN features should be coded so that they work in the
 following browsers:
 
-* Internet Explorer: 9, 8 and 7
+* Internet Explorer: 11, 10, 9 & 8
 * Firefox: Latest + previous version
 * Chrome: Latest + previous version
 
