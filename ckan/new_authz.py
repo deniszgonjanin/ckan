@@ -418,11 +418,10 @@ def check_config_permission(permission):
 
     value = config.get(config_key, default_value)
 
-    if key == 'roles_that_cascade_to_sub_groups':
-        # This permission is set as a list of strings (space separated)
-        value = value.split() if value else []
-    else:
+    if isinstance(default_value, bool):
         value = asbool(value)
+    else:
+        value = value.split() if value else []
 
     return value
 
