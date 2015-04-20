@@ -537,15 +537,16 @@ def group_list_authz(context, data_dict):
 
     _check_access('group_list_authz', context, data_dict)
 
-    sysadmin = new_authz.is_sysadmin(user)
-    roles = ckan.new_authz.get_roles_with_permission('manage_group')
-    if not roles:
-        return []
     user_id = new_authz.get_user_id_for_username(user, allow_none=True)
     if not user_id:
         return []
 
-    if not sysadmin or am_member:
+    show_all_groups = not am_member and new_authz.can_manage_all_groups(user)
+    if not show_all_groups:
+        roles = ckan.new_authz.get_roles_with_permission('manage_group')
+        if not roles:
+            return []
+
         q = model.Session.query(model.Member) \
             .filter(model.Member.table_name == 'user') \
             .filter(model.Member.capacity.in_(roles)) \
@@ -562,7 +563,7 @@ def group_list_authz(context, data_dict):
         .filter(model.Group.is_organization == False) \
         .filter(model.Group.state == 'active')
 
-    if not sysadmin or am_member:
+    if not show_all_groups:
         q = q.filter(model.Group.id.in_(group_ids))
 
     groups = q.all()
